@@ -1,0 +1,26 @@
+# Serves the Expo web build and proxies /api to Spring Boot on one HTTPS origin.
+# HTTPS matters even on the LAN: camera, location and similar browser APIs need a secure context.
+{
+	# Clients send no SNI when SITE_ADDRESS is an IP, and behind Docker's port
+	# forwarding Caddy can't match the certificate by local IP either. Without
+	# this, the TLS handshake fails with "internal error".
+	default_sni {$SITE_ADDRESS}
+}
+
+{$SITE_ADDRESS} {
+	# Certificates from Caddy's local CA; trust its root on the phone (see infra/README.md).
+	# Swap for a real domain + DNS challenge later.
+	tls internal
+
+	encode zstd gzip
+
+	handle /api/* {
+		reverse_proxy api:8080
+	}
+
+	handle {
+		root * /srv/web
+		try_files {path} /index.html
+		file_server
+	}
+}

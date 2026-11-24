@@ -1,0 +1,52 @@
+# Home-network deployment: reverse proxy (HTTPS) + API + PostgreSQL.
+# See infra/README.md for usage.
+name: catzilla
+
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: catzilla
+      POSTGRES_USER: ${DATABASE_USERNAME:?set in infra/.env}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?set in infra/.env}
+    # Published on this machine only (not the LAN) so the API can run from an IDE.
+    ports:
+      - "127.0.0.1:${DATABASE_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d catzilla"]
+      interval: 10s
+      retries: 5
+
+  api:
+    image: ${API_IMAGE:-catzilla-api:local}
+    build: ../api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/catzilla
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?set in infra/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../mobile/dist:/srv/web:ro
+      - caddy-data:/data
+    depends_on:
+      - api
+
+volumes:
+  db-data:
+  caddy-data:

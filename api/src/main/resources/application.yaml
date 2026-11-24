@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: catzilla-api
+  config:
+    # Optional local settings (see .env.example). Resolved against the working
+    # directory, so run from api/. Environment variables override these values.
+    import: optional:file:.env[.properties]
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/catzilla}
+    username: ${DATABASE_USERNAME:catzilla}
+    password: ${DATABASE_PASSWORD:catzilla}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+server:
+  # Everything is served under /api so the reverse proxy can route by path
+  # and the web app can call the API on the same origin.
+  servlet:
+    context-path: /api
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+catzilla:
+  cors:
+    # Comma-separated browser origins allowed cross-origin; empty in deployment
+    # (same origin behind the proxy). Set in api/.env for local development.
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  show-actuator: false

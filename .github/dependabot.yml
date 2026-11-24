@@ -1,0 +1,48 @@
+version: 2
+updates:
+  # Expo SDK packages must move together: upgrade the SDK deliberately with
+  # `npx expo install expo@<next> && npx expo install --fix`, not via Dependabot.
+  - package-ecosystem: npm
+    directory: /mobile
+    schedule:
+      interval: weekly
+    groups:
+      dev-tooling:
+        dependency-type: development
+    ignore:
+      - dependency-name: 'expo'
+      - dependency-name: 'expo-*'
+      - dependency-name: '@expo/*'
+      - dependency-name: 'react'
+      - dependency-name: 'react-dom'
+      - dependency-name: 'react-native'
+      - dependency-name: 'react-native-*'
+    commit-message:
+      prefix: 'chore(mobile)'
+
+  - package-ecosystem: gradle
+    directory: /api
+    schedule:
+      interval: weekly
+    groups:
+      gradle:
+        patterns: ['*']
+    commit-message:
+      prefix: 'chore(api)'
+
+  - package-ecosystem: docker
+    directories: [/api]
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: 'chore(api)'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ['*']
+    commit-message:
+      prefix: 'chore(ci)'

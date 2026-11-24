@@ -1,0 +1,7 @@
+# Replace OWNER with GitHub user or team handles (prefixed with @) once the repo is on GitHub.
+# Later rules win.
+# *            OWNER
+# /mobile/     OWNER
+# /api/        OWNER
+# /contracts/  OWNER
+# /infra/      OWNER

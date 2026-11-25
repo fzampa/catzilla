@@ -10,22 +10,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 /**
- * Keeps contracts/openapi.yaml in sync with the code. Runs without a database.
+ * Keeps contracts/openapi.yaml in sync with the code. Starts the whole application, so it needs Docker for
+ * PostgreSQL; without Docker it is skipped locally and still enforced in CI.
  *
  * <p>If it fails because the API changed on purpose, run {@code ./gradlew updateContract} and commit the
  * updated spec together with the code change.
  */
-@SpringBootTest(
-        properties = {
-            "spring.autoconfigure.exclude="
-                    + "org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration,"
-                    + "org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration,"
-                    + "org.springframework.boot.data.jpa.autoconfigure.DataJpaRepositoriesAutoConfiguration,"
-                    + "org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration"
-        })
+@Testcontainers(disabledWithoutDocker = true)
+@SpringBootTest
+@Import(TestcontainersConfiguration.class)
 @AutoConfigureMockMvc
 class OpenApiContractTest {
 

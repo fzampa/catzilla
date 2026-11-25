@@ -4,5 +4,186 @@ info:
   description: "Track cats' health, habits, weight and feeding schedules, shared within\
     \ a Home."
   version: v1
-paths: {}
-components: {}
+paths:
+  /v1/auth/register:
+    post:
+      tags:
+      - auth-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+  /v1/auth/refresh:
+    post:
+      tags:
+      - auth-controller
+      operationId: refresh
+      parameters:
+      - name: catzilla_refresh
+        in: cookie
+        required: false
+        schema:
+          type:
+          - string
+          - "null"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+  /v1/auth/logout:
+    post:
+      tags:
+      - auth-controller
+      operationId: logout
+      parameters:
+      - name: catzilla_refresh
+        in: cookie
+        required: false
+        schema:
+          type:
+          - string
+          - "null"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+      responses:
+        "200":
+          description: OK
+  /v1/auth/login:
+    post:
+      tags:
+      - auth-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+  /v1/me:
+    get:
+      tags:
+      - me-controller
+      operationId: me
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 320
+          minLength: 0
+        password:
+          type: string
+          maxLength: 128
+          minLength: 10
+        displayName:
+          type: string
+          maxLength: 100
+          minLength: 0
+        tokenDelivery:
+          type: string
+          enum:
+          - BODY
+          - COOKIE
+      required:
+      - displayName
+      - email
+      - password
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        tokenType:
+          type: string
+        expiresIn:
+          type: integer
+          format: int64
+        refreshToken:
+          type: string
+        refreshTokenExpiresIn:
+          type: integer
+          format: int64
+    RefreshTokenRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          maxLength: 320
+          minLength: 0
+        password:
+          type: string
+          maxLength: 128
+          minLength: 0
+        tokenDelivery:
+          type: string
+          enum:
+          - BODY
+          - COOKIE
+      required:
+      - email
+      - password
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        displayName:
+          type: string
+        emailVerified:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

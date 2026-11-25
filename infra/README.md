@@ -13,9 +13,15 @@ One Docker Compose stack on a machine on the home network:
 From the repository root:
 
 ```bash
-cp infra/.env.example infra/.env   # then fill in SITE_ADDRESS and DATABASE_PASSWORD
+cp infra/.env.example infra/.env   # then fill in SITE_ADDRESS, DATABASE_PASSWORD and JWT_PRIVATE_KEY
 (cd mobile && npm ci && EXPO_PUBLIC_API_URL= npm run build:web)
 docker compose -f infra/compose.yaml --env-file infra/.env up -d --build
+```
+
+`JWT_PRIVATE_KEY` is the key that signs sign-in tokens ([ADR-004](../docs/adr/ADR-004-authentication.md)). Generate it once and keep it; replacing it signs everyone out:
+
+```bash
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -outform DER | base64 | tr -d '\n'
 ```
 
 `EXPO_PUBLIC_API_URL=` (empty) makes the web app call `/api` on the address it was loaded from. It overrides any local-dev value in `mobile/.env`, such as `http://localhost:8080`, which would otherwise be baked into the bundle and break the app on the phone.

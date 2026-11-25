@@ -36,6 +36,9 @@ class CorsFilterConfiguration {
             config.setAllowedOrigins(allowedOrigins);
             config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
             config.setAllowedHeaders(List.of("*"));
+            // Lets the web dev server send the HttpOnly refresh cookie (ADR-004). Safe because origins are
+            // an explicit list, never "*".
+            config.setAllowCredentials(true);
             config.setMaxAge(Duration.ofHours(1));
             source.registerCorsConfiguration("/**", config);
         }

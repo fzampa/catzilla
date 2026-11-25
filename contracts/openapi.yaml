@@ -1,6 +1,8 @@
 openapi: 3.1.0
 info:
   title: Catzilla API
+  description: "Track cats' health, habits, weight and feeding schedules, shared within\
+    \ a Home."
   version: v1
 paths: {}
 components: {}

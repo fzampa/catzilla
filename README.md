@@ -32,4 +32,4 @@ It starts as a phone-first web app on the home network and will grow into iOS an
 - Commit messages use [Conventional Commits](https://www.conventionalcommits.org/), scoped by project: `feat(mobile): …`, `fix(api): …`.
 - An API change and its regenerated `contracts/openapi.yaml` land in the same PR.
 
-Architecture decisions: [ADR-001](docs/adr/ADR-001-platform-framework.md) (Expo), [ADR-002](docs/adr/ADR-002-repository-and-backend.md) (monorepo and backend), [ADR-003](docs/adr/ADR-003-multi-tenancy-users-and-roles.md) (multi-tenancy, users and roles).
+Architecture decisions: [ADR-001](docs/adr/ADR-001-platform-framework.md) (Expo), [ADR-002](docs/adr/ADR-002-repository-and-backend.md) (monorepo and backend), [ADR-003](docs/adr/ADR-003-multi-tenancy-users-and-roles.md) (multi-tenancy, users and roles), [ADR-004](docs/adr/ADR-004-authentication.md) (authentication).

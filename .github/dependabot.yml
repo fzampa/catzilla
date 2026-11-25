@@ -17,6 +17,16 @@ updates:
       - dependency-name: 'react-dom'
       - dependency-name: 'react-native'
       - dependency-name: 'react-native-*'
+      # Tooling whose versions are set by the Expo SDK (`npx expo install --fix`).
+      # TypeScript 7 and ESLint 10 broke eslint-config-expo in CI #7.
+      - dependency-name: 'typescript'
+      - dependency-name: 'eslint-config-expo'
+      - dependency-name: 'jest-expo'
+      - dependency-name: '@types/react'
+      - dependency-name: 'eslint'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'jest'
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore(mobile)'
 

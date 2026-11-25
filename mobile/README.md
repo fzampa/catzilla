@@ -1,6 +1,8 @@
 # catzilla-mobile
 
-Expo + React Native + TypeScript app. Web (on a phone, over the home network) is the first target; iOS and Android follow from the same code.
+The Catzilla app, where people track their cats' health, habits, weight and feeding times together with everyone in their Home (see the [product vision](../docs/product-vision.md)).
+
+Built with Expo + React Native + TypeScript. Web (on a phone, over the home network) is the first target; iOS and Android follow from the same code.
 
 ## Run
 

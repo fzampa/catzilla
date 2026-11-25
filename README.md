@@ -1,6 +1,8 @@
 # Catzilla
 
-A phone-first app, starting as a web MVP on the home network and growing into iOS and Android apps.
+Catzilla helps people look after their cats together: health, habits, weight and feeding times, shared by everyone in a Home, including a temporary cat sitter. See the [product vision](docs/product-vision.md).
+
+It starts as a phone-first web app on the home network and will grow into iOS and Android apps.
 
 | Folder | Contents |
 |---|---|
@@ -8,7 +10,7 @@ A phone-first app, starting as a web MVP on the home network and growing into iO
 | [`api/`](api/) | Spring Boot (Java 25) API, served under `/api` |
 | [`contracts/`](contracts/) | `openapi.yaml`, the API contract generated from `api/` |
 | [`infra/`](infra/) | Home-network deployment: Docker Compose, Caddy (HTTPS), PostgreSQL |
-| [`docs/adr/`](docs/adr/) | Architecture decision records |
+| [`docs/`](docs/) | [Product vision](docs/product-vision.md) and architecture decision records (`docs/adr/`) |
 
 ## Prerequisites
 
@@ -30,4 +32,4 @@ A phone-first app, starting as a web MVP on the home network and growing into iO
 - Commit messages use [Conventional Commits](https://www.conventionalcommits.org/), scoped by project: `feat(mobile): …`, `fix(api): …`.
 - An API change and its regenerated `contracts/openapi.yaml` land in the same PR.
 
-Architecture decisions: [ADR-001](docs/adr/ADR-001-platform-framework.md) (Expo), [ADR-002](docs/adr/ADR-002-repository-and-backend.md) (monorepo and backend).
+Architecture decisions: [ADR-001](docs/adr/ADR-001-platform-framework.md) (Expo), [ADR-002](docs/adr/ADR-002-repository-and-backend.md) (monorepo and backend), [ADR-003](docs/adr/ADR-003-multi-tenancy-users-and-roles.md) (multi-tenancy, users and roles).

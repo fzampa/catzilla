@@ -1,5 +1,7 @@
 # catzilla-api
 
+The Catzilla backend: users, Homes and their members, cats, feeding schedules and logs (see the [product vision](../docs/product-vision.md)).
+
 Spring Boot 4.2 service on Java 25, with PostgreSQL and Flyway. Every endpoint is served under `/api`.
 
 ## Run

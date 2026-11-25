@@ -17,6 +17,7 @@ Run from `api/`:
 ## Conventions
 
 - **Package by feature:** `app.catzilla.api.<feature>` holds that feature's controller, service, entities and repositories. Put cross-cutting code in `app.catzilla.api.shared`. `ArchitectureTest` forbids dependency cycles between feature packages.
+- **Tenancy ([ADR-003](../docs/adr/ADR-003-multi-tenancy-users-and-roles.md)):** Home data lives under `/v1/homes/{homeId}/...` and every such request passes the membership check (no access: 404; wrong role: 403). Take the user only from the authenticated principal. Every Home table has `home_id`, and every Home query filters by it. Use UUIDs for IDs. Test each Home endpoint with a user from another Home.
 - **HTTP:** everything is under the `/api` context path. Version public endpoints as `/v1/...` in controller mappings (`/api/v1/...` externally). Validate request bodies with Jakarta Validation.
 - **Database:** schema changes only through new Flyway migrations in `src/main/resources/db/migration` (`V<n>__<description>.sql`). Never edit an applied migration. Hibernate runs with `ddl-auto: validate`.
 - **Contract:** every change to the API surface needs `./gradlew updateContract` and the updated `contracts/openapi.yaml` in the same commit. `OpenApiContractTest` fails otherwise.

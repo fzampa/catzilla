@@ -1,6 +1,8 @@
 # Catzilla — agent guidance
 
-Catzilla is a monorepo with a mobile/web app and its API. See [ADR-002](docs/adr/ADR-002-repository-and-backend.md) for the repository layout and backend decisions.
+Catzilla helps people look after their cats together: health, habits, weight and feeding schedules, shared within a **Home** by its members and, later, a temporary cat sitter. Read [docs/product-vision.md](docs/product-vision.md) for the concepts, the releases and the open questions before designing features.
+
+This is a monorepo with a mobile/web app and its API. See [ADR-002](docs/adr/ADR-002-repository-and-backend.md) for the repository layout and backend decisions.
 
 | Folder | What it is | Guide |
 |---|---|---|
@@ -8,7 +10,7 @@ Catzilla is a monorepo with a mobile/web app and its API. See [ADR-002](docs/adr
 | `api/` | Spring Boot (Java) API, served under `/api` | [api/AGENTS.md](api/AGENTS.md) |
 | `contracts/` | `openapi.yaml`, generated from `api/` and committed | — |
 | `infra/` | Home-network deployment (Docker Compose + Caddy) | [infra/README.md](infra/README.md) |
-| `docs/adr/` | Architecture decision records | — |
+| `docs/` | Product vision (`product-vision.md`) and architecture decision records (`adr/`) | — |
 
 Read the guide for the folder you are changing before you edit it.
 
@@ -16,6 +18,7 @@ Read the guide for the folder you are changing before you edit it.
 
 - The initial release is a phone-oriented mini-MVP opened in a browser over the home network. The intended evolution is an iOS and Android mobile app.
 - A public, search-indexed website is not currently a requirement. Do not add SEO or public-site infrastructure without a product reason.
+- **The Home is the tenant boundary.** All cat data belongs to one Home. Everyone is a user; "home member" and "cat sitter" (time-limited) are roles a user has per Home, one role per Home. A user can be a member of several Homes and a sitter for others at the same time. Model this as a user–Home membership with a role, not as user types. Scope every query and every authorization check to the Home; never return data just because the user is logged in. Follow [ADR-003](docs/adr/ADR-003-multi-tenancy-users-and-roles.md): the Home ID goes in the path (`/api/v1/homes/{homeId}/...`), the user comes only from the authenticated identity (never a client-supplied ID), and every Home request goes through the membership check.
 
 ## Working principles
 
